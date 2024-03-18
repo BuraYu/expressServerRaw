@@ -1,70 +1,70 @@
-const express = require('express')
-const router = express.Router()
-const Subscriber = require('../models/test')
+const express = require("express");
+const router = express.Router();
+const User = require("../models/test");
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const subscribers = await Subscriber.find()
-    res.json(subscribers)
+    const users = await User.find();
+    res.json(users);
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message });
   }
-})
+});
 
-router.get('/:id', getSubscriber, (req, res) => {
-  res.json(res.subscriber)
-})
+router.get("/:id", getUser, (req, res) => {
+  res.json(res.user);
+});
 
-router.post('/', async (req, res) => {
-  const subscriber = new Subscriber({
+router.post("/", async (req, res) => {
+  const user = new User({
     name: req.body.name,
-    subscribedToChannel: req.body.subscribedToChannel
-  })
+    title: req.body.title,
+  });
   try {
-    const newSubscriber = await subscriber.save()
-    res.status(201).json(newSubscriber)
+    const newUser = await user.save();
+    res.status(201).json(newUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
-})
+});
 
-router.patch('/:id', getSubscriber, async (req, res) => {
+router.patch("/:id", getUser, async (req, res) => {
   if (req.body.name != null) {
-    res.subscriber.name = req.body.name
+    res.user.name = req.body.name;
   }
-  if (req.body.subscribedToChannel != null) {
-    res.subscriber.subscribedToChannel = req.body.subscribedToChannel
+  if (req.body.title != null) {
+    res.user.title = req.body.title;
   }
   try {
-    const updatedSubscriber = await res.subscriber.save()
-    res.json(updatedSubscriber)
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
-})
+});
 
-router.delete('/:id', getSubscriber, async (req, res) => {
+router.delete("/:id", getUser, async (req, res) => {
   try {
-    await res.subscriber.remove()
-    res.json({ message: 'Deleted Subscriber' })
+    await res.user.remove();
+    res.json({ message: "Deleted User" });
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message });
   }
-})
+});
 
-async function getSubscriber(req, res, next) {
-  let subscriber
+async function getUser(req, res, next) {
+  let user;
   try {
-    subscriber = await Subscriber.findById(req.params.id)
-    if (subscriber == null) {
-      return res.status(404).json({ message: 'Cannot find subscriber' })
+    user = await User.findById(req.params.id);
+    if (user == null) {
+      return res.status(404).json({ message: "Cannot find user" });
     }
   } catch (err) {
-    return res.status(500).json({ message: err.message })
+    return res.status(500).json({ message: err.message });
   }
 
-  res.subscriber = subscriber
-  next()
+  res.user = user;
+  next();
 }
 
-module.exports = router
+module.exports = router;

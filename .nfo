@@ -1,0 +1,2 @@
+DATABASE_URL=mongodb+srv://username:password@cluster0.rmoratj.mongodb.net/NAMEOFTHEDATABSE?retryWrites=true&w=majority&appName=Cluster0
+
